@@ -54,7 +54,7 @@ function App() {
             />
           }
         ></Route>
-        <Route path="/about" element={<About />}></Route>
+        <Route path="/about" element={<About mode={darkMode} />}></Route>
       </Routes>
     </>
   );
