@@ -1,32 +1,61 @@
-import './App.css';
-
+import "./App.css";
+import Navbar from "./components/Navbar";
+import About from "./components/About";
+import Home from "./components/Home";
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
+  const [darkMode, setDarkMode] = useState("light");
+  const [alert, setAlert] = useState(null);
+
+  const setAlertMessage = (message, type) => {
+    setAlert({
+      message: message,
+      type: type,
+    });
+
+    setTimeout(() => {
+      setAlert(null);
+    }, 1500);
+  };
+
+  const toggleMode = () => {
+    if (darkMode === "light") {
+      setDarkMode("dark");
+      document.body.style.backgroundColor = "grey";
+      document.body.style.color = "white";
+      setAlertMessage("Dark Mode Enabled!", "success");
+    } else {
+      setDarkMode("light");
+      document.body.style.backgroundColor = "white";
+      document.body.style.color = "black";
+
+      setAlertMessage("Light Mode Enabled!", "success");
+    }
+  };
+
   return (
     <>
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
-        <a className="navbar-brand" href="/">TextUtils</a>
-        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span className="navbar-toggler-icon"></span>
-        </button>
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-            <li className="nav-item">
-              <a className="nav-link active" aria-current="page" href="/">Home</a>
-            </li>
-            <li className="nav-item">
-              <a className="nav-link" href="/">About</a>
-            </li>
-          </ul>
-          <form className="d-flex" role="search">
-            <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-            <button className="btn btn-outline-success" type="submit">Search</button>
-          </form>
-        </div>
-      </div>
-    </nav>
-
+      <Navbar
+        title="TextUtils"
+        aboutText="About Us"
+        mode={darkMode}
+        toggleMode={toggleMode}
+      />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Home
+              alert={alert}
+              setAlertMessage={setAlertMessage}
+              mode={darkMode}
+            />
+          }
+        ></Route>
+        <Route path="/about" element={<About />}></Route>
+      </Routes>
     </>
   );
 }
